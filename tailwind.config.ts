@@ -9,6 +9,9 @@ export default {
   theme: {
     extend: {
       colors: {
+        droplo: {
+          purple: "#6941C6"
+        } ,
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
