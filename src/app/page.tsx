@@ -33,12 +33,25 @@ const Home = () => {
     };
 
     const handleDelete = (index: number) => {
-        setMenuItems((prev) => prev.filter((_, i) => i !== index));
+        setMenuItems((prev) => {
+            const updatedItems = prev.filter((_, i) => i !== index);
+            // const updatedItems = prev.filter((item, i) => i !== index);  => jak w sumie lepiej pisać?
+
+
+            if (editingIndex !== null && editingIndex === index) {
+                setEditingIndex(null);
+            }
+            if (editingIndex !== null && editingIndex > index) {
+                setEditingIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
+            }
+
+            return updatedItems;
+        });
     };
 
     const handleEdit = (index: number) => {
-        setEditingIndex(index); // Ustaw indeks pozycji do edycji
-        setIsFormOpen(true); // Otwórz formularz
+        setEditingIndex(index);
+        setIsFormOpen(true);
     };
 
     useEffect(() => {

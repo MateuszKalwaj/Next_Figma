@@ -14,7 +14,7 @@ interface Props {
 const PositionList = ({ items, onDelete, onEdit }: Props) => {
     return (
         <div className="w-[1168px] mx-auto mt-8">
-            <ul className="flex flex-col gap-0 border-t border-gray-300 rounded-md">
+            <ul className="flex flex-col gap-0 rounded-md">
                 {items.length > 0 ? (
                     items.map((item, index) => (
                         <li
@@ -43,7 +43,7 @@ const PositionList = ({ items, onDelete, onEdit }: Props) => {
                         </li>
                     ))
                 ) : (
-                    <p className="text-center text-gray-500">Brak pozycji w menu.</p>
+                    <p className="text-center text-gray-500">Brak pozycji</p>
                 )}
             </ul>
         </div>
