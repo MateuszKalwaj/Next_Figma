@@ -59,7 +59,7 @@ const Home = () => {
     })
 
     return (
-        <div className="w-full px-4 py-6">
+        <div className="w-full xl:w-8/12 mx-auto px-4 py-6">
             <Header handleNewPosition={handleNewPosition}/>
             <Form
                 visible={isFormOpen}

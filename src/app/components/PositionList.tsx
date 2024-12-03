@@ -13,7 +13,7 @@ interface Props {
 
 const PositionList = ({ items, onDelete, onEdit }: Props) => {
     return (
-        <div className="w-[1168px] mx-auto mt-8">
+        <div className="mx-auto mt-8">
             <ul className="flex flex-col gap-0 rounded-md">
                 {items.length > 0 ? (
                     items.map((item, index) => (
