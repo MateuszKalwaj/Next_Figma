@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import PlusCircleIcon from "@/app/components/icons/PlusCircleIcon";
 
 interface Props {
     handleNewPosition: () => void;
@@ -18,9 +18,7 @@ const Header = ({handleNewPosition}: Props) => {
             <button onClick={() => handleNewPosition()}
                     className="leading-5 bg-[#7F56D9] rounded-[10px] text-white px-3.5 py-2.5 mt-4 flex items-center justify-center gap-2 text-sm font-semibold"
             >
-            <span className="w-5 h-5 rounded-full border-white border-2 flex items-center justify-center">
-                <span className="">+</span>
-            </span>
+                <PlusCircleIcon />
                 <span>Dodaj pozycję menu</span>
             </button>
 
