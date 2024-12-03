@@ -1,16 +1,23 @@
 'use client';
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 
 interface Props {
     visible: boolean,
     onCancel: () => void,
     onAdd: (name: string, link: string) => void
+    initialName?: string;
+    initialLink?: string;
 }
 
-const Form = ({ visible, onCancel, onAdd }: Props) => {
+const Form = ({ visible, onCancel, onAdd, initialName = "", initialLink = "" }: Props) => {
     const [name, setName] = useState("");
     const [link, setLink] = useState("");
+
+    useEffect(() => {
+        setName(initialName);
+        setLink(initialLink);
+    }, [initialName, initialLink]);
 
     const handleAdd = () => {
         onAdd(name, link);
@@ -57,7 +64,7 @@ const Form = ({ visible, onCancel, onAdd }: Props) => {
                 onClick={handleAdd}
                 className="rounded-[8px] border border-[#D0D5DD] text-droplo-purple px-3.5 py-2.5"
             >
-                Dodaj
+                {initialName ? "Zapisz" : "Dodaj"}
             </button>
         </div>
     </div>) : null

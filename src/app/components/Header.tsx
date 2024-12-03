@@ -28,4 +28,4 @@ const Header = ({handleNewPosition}: Props) => {
     );
 };
 
-export default Header
+export default Header;
