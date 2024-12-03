@@ -1,5 +1,5 @@
 'use client';
-import {inter} from "@/app/fonts/fonts";
+
 import React from "react";
 
 interface Props {
@@ -16,7 +16,7 @@ const Header = ({handleNewPosition}: Props) => {
                 <p className="text-gray-600 mt-2">W tym menu nie ma jeszcze żadnych linków</p>
             </div>
             <button onClick={() => handleNewPosition()}
-                    className={`${inter.className} leading-5 bg-[#7F56D9] rounded-[10px] text-white px-3.5 py-2.5 mt-4 flex items-center justify-center gap-2 text-sm font-semibold`}
+                    className="leading-5 bg-[#7F56D9] rounded-[10px] text-white px-3.5 py-2.5 mt-4 flex items-center justify-center gap-2 text-sm font-semibold"
             >
             <span className="w-5 h-5 rounded-full border-white border-2 flex items-center justify-center">
                 <span className="">+</span>

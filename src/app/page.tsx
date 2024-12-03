@@ -1,4 +1,5 @@
 'use client';
+import {inter} from "@/app/fonts/fonts";
 import Header from "@/app/components/Header";
 import {useEffect, useState} from "react";
 import Form from "@/app/components/Form";
@@ -59,7 +60,7 @@ const Home = () => {
     })
 
     return (
-        <div className="w-full xl:w-8/12 mx-auto px-4 py-6">
+        <div className={`${inter.className} w-full xl:w-8/12 mx-auto px-4 py-6`}>
             <Header handleNewPosition={handleNewPosition}/>
             <Form
                 visible={isFormOpen}
