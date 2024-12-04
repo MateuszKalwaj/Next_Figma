@@ -10,80 +10,70 @@ const Home = () => {
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [menuItems, setMenuItems] = useState<MainPosition>({items: []});
-    const [editingId, setEditingId] = useState<number | null>(null);
+    const [itemInEdit, setItemInEdit] = useState<PositionItem | null>(null);
 
     const handleNewPosition = () => {
         setIsFormOpen(true)
-        setEditingId(null);
     }
 
     const handleCancel = () => {
         setIsFormOpen(false);
+        console.log(itemInEdit)
+        if (itemInEdit) {
+            setItemInEdit(null);
+        }
     };
 
     const handleAdd = (name: string, link: string) => {
 
-        if (editingId !== null) {
-            // setMenuItems((prev) =>
-            //     prev.map((item) =>
-            //         item.id === editingId ? { ...item, name, link } : item
-            //     )
-            // );
+        if (itemInEdit) {
+            console.log('this case');
+            itemInEdit.name = name;
+            itemInEdit.link = link;
+            setItemInEdit(null);
         } else {
             const newItem: PositionItem = {id: Date.now(), link, name, items: []};
             const newItemsArray = [...menuItems.items, newItem];
             setMenuItems({items: newItemsArray});
         }
         setIsFormOpen(false);
-        setEditingId(null);
     };
 
     const handleDelete = (id: number) => {
-        // setMenuItems((prev) => prev.filter((item) => item.id !== id));
-        // setEditingId(null);
+        const itemToDelete = matchItems(menuItems.items, id);
+        console.log(itemToDelete);
+        const newMenuItems = [...menuItems.items].filter(item => itemToDelete !== item);
+        setMenuItems({items: newMenuItems});
     };
 
-    // const matchItems: PositionItem | null = (items: PositionItem[], searchedId: number) => {
-    //     if (!items) {
-    //         return null;
-    //     }
-    //     let searchedItem = items.find(item => item.id === searchedId);
-    //     if (searchedItem) {
-    //         return searchedItem;
-    //     }
-    //     searchedItem = items.find((item) => {
-    //         return matchItems(item.items, searchedId);
-    //     })
-    //     return searchedItem ? searchedItem : null;
-    // }
+    const matchItems = (items: PositionItem[], searchedId: number): PositionItem | null => {
+        if (!items.length) {
+            return null;
+        }
+        let searchedItem = items.find(item => item.id === searchedId);
+        if (searchedItem) {
+            return searchedItem;
+        }
+        searchedItem = items.find(item => item.items && Array.isArray(item.items) && matchItems(item.items, searchedId));
 
-    const findItemToEdit = (id: number) => {
-        // return matchItems(menuItems, id);
-        // return menuItems.find((menuItem) => {
-        //     console.log(menuItem);
-        //     return menuItem.id === id
-        // });
-    }
+        return searchedItem || null;
+    };
 
     const handleEdit = (id: number) => {
-        console.log('Hanle Edit')
-        console.log(id)
-        // const itemToEdit = findItemToEdit(id);
-        // if (itemToEdit) {
-        //     setEditingId(id);
-        //     setIsFormOpen(true);
-        // }
+        const itemToEdit = matchItems(menuItems.items, id);
+        if (itemToEdit) {
+            setItemInEdit(itemToEdit);
+            setIsFormOpen(true);
+        }
     };
 
     const handleAddPosition = () => {
-        setEditingId(null);
         setIsFormOpen(true);
     };
 
     useEffect(() => {
         console.log(menuItems)
     })
-    // const currentItem = menuItems.positions.find((item) => item.id === editingId);
 
     return (
         <div className={`${inter.className} w-full mx-auto px-4 py-6`}>
@@ -92,8 +82,8 @@ const Home = () => {
                 visible={isFormOpen}
                 onCancel={handleCancel}
                 onAdd={handleAdd}
-                initialName={""}
-                initialLink={""}
+                name={itemInEdit ? itemInEdit.name : ""}
+                link={itemInEdit ? itemInEdit.link : ""}
             />
             <PositionList positions={menuItems.items}
                           onDelete={handleDelete}

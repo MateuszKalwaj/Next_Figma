@@ -12,9 +12,6 @@ interface Props {
 
 const Position = ({item, onDelete, onEdit, onAdd}: Props) => {
     if (!item) return null;
-
-    console.log(item)
-
     return (
         <div className="w-full flex-wrap gap-1 bg-white flex justify-between items-center py-4 px-6 shadow-custom-inset rounded-t-lg">
             <div className="flex items-center">
