@@ -33,7 +33,7 @@ const Form = ({ visible, onCancel, onAdd, initialName = "", initialLink = "" }: 
     };
 
     return visible ? (<div
-        className="bg-[#FFF] shadow-[inset_0px_0px_0px_1px_#D0D5DD] rounded-lg mx-auto mt-8 pb-5 space-y-5 w-full">
+        className="bg-[#FFF] shadow-custom-inset rounded-lg mx-auto mt-8 pb-5 space-y-5 w-full">
         <div className="flex flex-row px-6 pt-5 gap-4">
             <div className="w-full leading-5 space-y-2">
                 <InputText value={name} id="name" onChange={(e) => setName(e.target.value)} />
@@ -46,8 +46,8 @@ const Form = ({ visible, onCancel, onAdd, initialName = "", initialLink = "" }: 
             </div>
         </div>
         <div className="flex justify-start px-6 gap-2">
-            <Button onClick={onCancel} text="Anuluj" classes="shadow-[inset_0px_0px_0px_1px_#D0D5DD]"/>
-            <Button onClick={handleAdd} text={initialName ? "Zapisz" : "Dodaj"} classes="text-droplo-purple shadow-[inset_0px_0px_0px_1px_#D6BBFB]"/>
+            <Button onClick={onCancel} text="Anuluj" classes="shadow-custom-inset"/>
+            <Button onClick={handleAdd} text={initialName ? "Zapisz" : "Dodaj"} classes="text-droplo-purple shadow-custom-inset"/>
         </div>
     </div>) : null
 };
