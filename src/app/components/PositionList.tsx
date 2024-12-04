@@ -1,6 +1,9 @@
 'use client';
 
+import Button from "./Button";
+
 interface MenuItem {
+    id: number;
     name: string;
     link: string;
 }
@@ -9,17 +12,18 @@ interface Props {
     items: MenuItem[];
     onDelete: (index: number) => void;
     onEdit: (index: number) => void;
+    onAdd: () => void;
 }
 
-const PositionList = ({ items, onDelete, onEdit }: Props) => {
+const PositionList = ({ items, onDelete, onEdit, onAdd }: Props) => {
     return (
-        <div className="mx-auto mt-8">
-            <ul className="flex flex-col gap-0 rounded-md">
+        <div className="mx-auto mt-8 ">
+            <ul className="">
                 {items.length > 0 ? (
                     items.map((item, index) => (
                         <li
                             key={index}
-                            className="flex justify-between items-center p-6 px-8 border-b border-gray-300 bg-white shadow-sm"
+                            className="flex justify-between items-center p-6 px-8 shadow-[inset_0px_0px_0px_1px_#D0D5DD]"
                         >
                             <div className="flex flex-col gap-1">
                                 <span className="font-medium text-gray-800">{item.name}</span>
@@ -27,18 +31,22 @@ const PositionList = ({ items, onDelete, onEdit }: Props) => {
                             </div>
 
                             <div className="flex gap-4">
-                                <button
-                                    onClick={() => onDelete(index)}
-                                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+                                <Button
+                                    onClick={() => onDelete(item.id)}
+                                    classes="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+                                    text={"Usuń"}
                                 >
-                                    Usuń
-                                </button>
-                                <button
-                                    onClick={() => onEdit(index)}
-                                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+                                </Button>
+                                <Button
+                                    onClick={() => onEdit(item.id)}
+                                    classes="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+                                    text={"Edytuj"}
                                 >
-                                    Edytuj
-                                </button>
+                                </Button>
+                                <Button text={"Dodaj pozycje menu"} classes={"shadow-[inset_0px_0px_0px_1px_#D0D5DD]"} onClick={onAdd}
+                                >
+
+                                </Button>
                             </div>
                         </li>
                     ))

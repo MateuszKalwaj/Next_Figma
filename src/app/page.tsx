@@ -8,12 +8,12 @@ import PositionList from "@/app/components/PositionList";
 const Home = () => {
 
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [menuItems, setMenuItems] = useState<{ name: string; link: string }[]>([]);
-    const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    const [menuItems, setMenuItems] = useState<{id: number; name: string; link: string }[]>([]);
+    const [editingId, setEditingId] = useState<number | null>(null);
 
     const handleNewPosition = () => {
         setIsFormOpen(true)
-        setEditingIndex(null);
+        setEditingId(null);
     }
 
     const handleCancel = () => {
@@ -21,43 +21,44 @@ const Home = () => {
     };
 
     const handleAdd = (name: string, link: string) => {
-        if (editingIndex !== null) {
+        if (editingId !== null) {
             setMenuItems((prev) =>
-                prev.map((item, index) =>
-                    index === editingIndex ? {name, link} : item
+                prev.map((item) =>
+                    item.id === editingId ? { ...item, name, link } : item
                 )
             );
         } else {
-            setMenuItems((prev) => [...prev, {name, link}]);
+            setMenuItems((prev) => [
+                ...prev,
+                { id: Date.now(), name, link },
+            ]);
         }
         setIsFormOpen(false);
+        setEditingId(null);
     };
 
-    const handleDelete = (index: number) => {
-        setMenuItems((prev) => {
-            const updatedItems = prev.filter((_, i) => i !== index);
-            // const updatedItems = prev.filter((item, i) => i !== index);  => jak w sumie lepiej pisać?
-
-
-            if (editingIndex !== null && editingIndex === index) {
-                setEditingIndex(null);
-            }
-            if (editingIndex !== null && editingIndex > index) {
-                setEditingIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
-            }
-
-            return updatedItems;
-        });
+    const handleDelete = (id: number) => {
+        setMenuItems((prev) => prev.filter((item) => item.id !== id));
+        setEditingId(null);
     };
 
-    const handleEdit = (index: number) => {
-        setEditingIndex(index);
+    const handleEdit = (id: number) => {
+        const itemToEdit = menuItems.find((item) => item.id === id);
+        if (itemToEdit) {
+            setEditingId(id);
+            setIsFormOpen(true);
+        }
+    };
+
+    const handleAddPosition = () => {
+        setEditingId(null);
         setIsFormOpen(true);
     };
 
     useEffect(() => {
         console.log(menuItems)
     })
+    const currentItem = menuItems.find((item) => item.id === editingId);
 
     return (
         <div className={`${inter.className} w-full mx-auto px-4 py-6`}>
@@ -66,12 +67,13 @@ const Home = () => {
                 visible={isFormOpen}
                 onCancel={handleCancel}
                 onAdd={handleAdd}
-                initialName={editingIndex !== null ? menuItems[editingIndex].name : ""}
-                initialLink={editingIndex !== null ? menuItems[editingIndex].link : ""}
+                initialName={currentItem ? currentItem.name : ""}
+                initialLink={currentItem ? currentItem.link : ""}
             />
             <PositionList items={menuItems}
                           onDelete={handleDelete}
-                          onEdit={handleEdit}/>
+                          onEdit={handleEdit}
+                          onAdd={handleAddPosition} />
         </div>
     );
 }

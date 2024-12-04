@@ -28,6 +28,10 @@ const Form = ({ visible, onCancel, onAdd, initialName = "", initialLink = "" }: 
         setLink("");
     };
 
+    const handleDelete = () => {
+        onCancel();
+    };
+
     return visible ? (<div
         className="bg-[#FFF] shadow-[inset_0px_0px_0px_1px_#D0D5DD] rounded-lg mx-auto mt-8 pb-5 space-y-5 w-full">
         <div className="flex flex-row px-6 pt-5 gap-4">
@@ -36,7 +40,7 @@ const Form = ({ visible, onCancel, onAdd, initialName = "", initialLink = "" }: 
                 <InputSearch value={link} id="link" onChange={(e) => setLink(e.target.value)} />
             </div>
             <div>
-                <button className="h-10 w-10 p-2.5">
+                <button className="h-10 w-10 p-2.5" onClick={handleDelete}>
                     <TrashIcon />
                 </button>
             </div>
