@@ -1,96 +1,72 @@
 'use client';
-import {inter} from "@/app/fonts/fonts";
-import {MainPosition, PositionItem} from "@/types/types";
-import Header from "@/app/components/Header";
-import {useEffect, useState} from "react";
-import Form from "@/app/components/Form";
-import PositionList from "@/app/components/PositionList";
+import { inter } from '@/app/fonts/fonts';
+import Header from '@/app/components/Header';
+import Form from '@/app/components/Form';
+import PositionList from '@/app/components/PositionList';
+import { MenuProvider, useMenu } from '@/app/context/MenuContext';
+import { useState } from 'react';
+import {PositionItem} from "@/types/types";
 
 const Home = () => {
-
+    const { menuItems, addItem, editItem, deleteItem } = useMenu();
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [menuItems, setMenuItems] = useState<MainPosition>({items: []});
-    const [itemInEdit, setItemInEdit] = useState<PositionItem | null>(null);
+    const [pathToEdit, setPathToEdit] = useState<number[] | null>(null);
 
     const handleNewPosition = () => {
-        setIsFormOpen(true)
-    }
+        setIsFormOpen(true);
+        setPathToEdit(null);
+    };
 
     const handleCancel = () => {
         setIsFormOpen(false);
-        console.log(itemInEdit)
-        if (itemInEdit) {
-            setItemInEdit(null);
-        }
     };
 
     const handleAdd = (name: string, link: string) => {
-
-        if (itemInEdit) {
-            console.log('this case');
-            itemInEdit.name = name;
-            itemInEdit.link = link;
-            setItemInEdit(null);
+        if (pathToEdit) {
+            editItem(pathToEdit, name, link);
         } else {
-            const newItem: PositionItem = {id: Date.now(), link, name, items: []};
-            const newItemsArray = [...menuItems.items, newItem];
-            setMenuItems({items: newItemsArray});
+            addItem([], name, link);
         }
         setIsFormOpen(false);
     };
 
-    const handleDelete = (id: number) => {
-        const itemToDelete = matchItems(menuItems.items, id);
-        console.log(itemToDelete);
-        const newMenuItems = [...menuItems.items].filter(item => itemToDelete !== item);
-        setMenuItems({items: newMenuItems});
+    const findItemByPath = (items: PositionItem[], path: number[]): PositionItem | null => {
+        if (path.length === 0) return null;
+        const item = items.find((i) => i.id === path[0]);
+        if (!item) return null;
+        if (path.length === 1) return item;
+        return findItemByPath(item.items, path.slice(1));
     };
 
-    const matchItems = (items: PositionItem[], searchedId: number): PositionItem | null => {
-        if (!items.length) {
-            return null;
-        }
-        let searchedItem = items.find(item => item.id === searchedId);
-        if (searchedItem) {
-            return searchedItem;
-        }
-        searchedItem = items.find(item => item.items && Array.isArray(item.items) && matchItems(item.items, searchedId));
-
-        return searchedItem || null;
-    };
-
-    const handleEdit = (id: number) => {
-        const itemToEdit = matchItems(menuItems.items, id);
-        if (itemToEdit) {
-            setItemInEdit(itemToEdit);
-            setIsFormOpen(true);
-        }
-    };
-
-    const handleAddPosition = () => {
-        setIsFormOpen(true);
-    };
-
-    useEffect(() => {
-        console.log(menuItems)
-    })
 
     return (
         <div className={`${inter.className} w-full mx-auto px-4 py-6`}>
-            <Header handleNewPosition={handleNewPosition}/>
+            <Header handleNewPosition={handleNewPosition} />
             <Form
                 visible={isFormOpen}
                 onCancel={handleCancel}
                 onAdd={handleAdd}
-                name={itemInEdit ? itemInEdit.name : ""}
-                link={itemInEdit ? itemInEdit.link : ""}
+                name={pathToEdit ? findItemByPath(menuItems.items, pathToEdit)?.name : ''}
+                link={pathToEdit ? findItemByPath(menuItems.items, pathToEdit)?.link : ''}
             />
-            <PositionList positions={menuItems.items}
-                          onDelete={handleDelete}
-                          onEdit={handleEdit}
-                          onAdd={handleAddPosition} />
+            <PositionList
+                positions={menuItems.items}
+                onDelete={deleteItem}
+                onEdit={(path) => {
+                    setPathToEdit(path);
+                    setIsFormOpen(true);
+                }}
+                onAdd={(path, name, link) => addItem(path, name, link)}
+            />
+
         </div>
     );
-}
+};
 
-export default Home;
+export default function App() {
+    return (
+        <MenuProvider>
+            <Home />
+        </MenuProvider>
+    );
+}
